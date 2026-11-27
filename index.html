@@ -1,48 +1,585 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Team Project Name</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="한국어 발표 연습 및 말 빠르기 측정 서비스">
+    <title>PaceCue</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
- <header>
- <h1>Team Project Name</h1>
- <nav>
- <a href="#overview">Overview</a> |
- <a href="#team">Team</a> |
- <a href="#goals">Goals</a> |
- <a href="#timeline">Timeline</a>
- </nav>
- </header>
- <main>
- <!-- Feature sections will be added here by different members -->
+    <header>
+        <!-- PaceCue 공통 로고 -->
+        <div class="logo">
+            <svg viewBox="0 0 48 48" class="logo-icon"
+                aria-hidden="true">
+                <rect x="2" y="2" width="44" height="44"
+                    rx="11" fill="#2e362b"/>
 
-<!-- ===== Project Overview / Hero (담당: 김서연) ===== -->
-<section id="overview" class="hero">
-  <h2>Medication Assistance Service for Older Adults</h2>
+                <g fill="#ffffff">
+                    <rect x="10" y="18" width="4" height="12" rx="2"/>
+                    <rect x="16" y="12.5" width="4" height="23" rx="2"/>
+                    <rect x="22" y="8" width="4" height="32" rx="2"/>
+                    <rect x="28" y="12.5" width="4" height="23" rx="2"/>
+                    <rect x="34" y="18" width="4" height="12" rx="2"/>
+                </g>
+            </svg>
 
-  <div class="hero-block">
-    <h3>one-sentence summary</h3>
-    <p>An easy-to-use service that helps people understand their medicine, take it on time, and stay connected with family, all with simple words and big text.</p>
-  </div>
+            <span class="logo-text">PaceCue</span>
+        </div>
 
-  <div class="hero-block">
-    <h3>short description</h3>
-    <p>
-      Many people, especially older adults, struggle to understand the information about their medicine, remember when to take it, or know which medicines are unsafe together. 
-Families living far away also have no easy way to know if their parents are taking their medicine properly.
-While many people can simply search online, older adults often get lost in the flood of information, or even find it hard to access it in the first place, so our service organizes it all in one place and reminds them when to take their medicine.
-    </p>
-  </div>
+        <!-- 상단 내비게이션 -->
+        <nav aria-label="메인 메뉴">
+            <a href="#mode" class="active">모드 선택</a>
+            <a href="#script">대본</a>
+            <a href="#practice">연습</a>
+            <a href="#result">결과</a>
+        </nav>
+    </header>
 
-  <a href="#goals" class="hero-button">Learn More ↓</a>
-</section>
-<!-- ===== /Project Overview ===== -->
+    <main>
+        <!-- 1. 모드 선택 화면 -->
+        <section id="mode">
+            <h1>모드를 선택하세요</h1>
 
- </main>
- <footer>
- <p>&copy; 2026 Team Name · <a href="REPO_URL">GitHub Repository</a></p>
- </footer>
+            <div class="mode-cards">
+                <!-- 프롬프터 모드 -->
+                <article class="mode-card">
+                    <div class="prompter-preview">
+                        <p>좋은 발표는 완벽한 문장보다</p>
+
+                        <p class="preview-highlight">
+                            나의 생각을 전하는 데서 시작됩니다.
+                        </p>
+
+                        <p>천천히, 나만의 속도로 말해보세요.</p>
+                    </div>
+
+                    <h2>프롬프터 모드</h2>
+
+                    <p class="mode-description">
+                        입력한 원고를 보면서 말해보세요.<br>
+                        최적의 속도를 조절합니다.
+                    </p>
+
+                    <button type="button" id="prompter-mode-btn"
+                        class="mode-btn prompter-btn">
+                        프롬프터 모드 시작하기
+                        <span>↗</span>
+                    </button>
+                </article>
+
+                <!-- 실전 모드 -->
+                <article class="mode-card">
+                    <div class="real-preview"></div>
+
+                    <h2>실전 모드</h2>
+
+                    <p class="mode-description">
+                        원고 없이 실제 상황처럼 말해보세요.<br>
+                        AI가 제공하는 요약 대본으로 연습할 수 있어요.
+                    </p>
+
+                    <button type="button" id="real-mode-btn"
+                        class="mode-btn real-btn">
+                        실전 모드 시작하기
+                        <span>↗</span>
+                    </button>
+                </article>
+            </div>
+        </section>
+
+        <!-- 2. 대본 삽입 화면 -->
+        <section id="script" hidden>
+
+            <div class="script-header">
+                <h1>대본 삽입</h1>
+
+                <!-- 대본 파일 업로드 -->
+                <div class="file-upload">
+                    <label for="docs-url" class="visually-hidden">
+                        Google Docs 링크
+                    </label>
+
+                    <input type="url" id="docs-url"
+                        placeholder="Google Docs 링크 입력">
+
+                    <button type="button" id="docs-import-btn">
+                        불러오기
+                    </button>
+
+                    <label for="script-file" class="visually-hidden">
+                        대본 파일 업로드
+                    </label>
+
+                    <input type="file" id="script-file"
+                        accept=".doc,.docx,.txt">
+                </div>
+            </div>
+
+            <!-- 대본 입력 영역 -->
+            <textarea id="script-input"
+                aria-label="발표 대본"
+                placeholder="대본을 붙여 넣거나 직접 입력하세요."></textarea>
+
+            <!-- 대본 확인 영역 -->
+            <div class="script-confirm">
+                <p>대본 입력을 마치면 확인을 눌러 예상 발표 시간을 확인하세요.</p>
+
+                <button type="button" id="confirm-btn"
+                    class="primary-btn" disabled>
+                    확인
+                </button>
+            </div>
+
+            <!-- 발표 시간 설정 영역 -->
+            <div class="time-cards">
+
+                <!-- 예상 발표 시간 -->
+                <div class="time-card">
+                    <h2>예상 발표 시간</h2>
+
+                    <p id="estimated-time">
+                        -- 분 -- 초
+                    </p>
+                </div>
+
+                <!-- 목표 발표 시간 -->
+                <div class="time-card">
+                    <h2>목표 발표 시간</h2>
+
+                    <div class="target-time">
+                        <input type="number" id="target-minutes"
+                            aria-label="목표 발표 시간 분"
+                            min="0" value="05">
+
+                        <label for="target-minutes">분</label>
+
+                        <input type="number" id="target-seconds"
+                            aria-label="목표 발표 시간 초"
+                            min="0" max="59" value="00">
+
+                        <label for="target-seconds">초</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 숨 고르기 마커 및 연습 시작 -->
+            <div class="script-actions">
+                <div class="marker-setting">
+
+                    <label for="breath-toggle">
+                        숨 고르기 마커 삽입
+                    </label>
+
+                    <input type="checkbox" id="breath-toggle"
+                        class="toggle" checked>
+                </div>
+
+                <button type="button" id="start-practice-btn"
+                    class="primary-btn">
+                    연습 시작
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. 프롬프터 모드 연습 화면 -->
+        <section id="practice" class="practice-layout" hidden>
+
+            <!-- 왼쪽 연습 영역 -->
+            <div class="practice-main">
+
+                <!-- 글자 크기 조절 -->
+                <div class="font-control">
+                    <span class="practice-mode-label">
+                        프롬프터 모드
+                    </span>
+
+                    <label for="font-size">글자 크기</label>
+
+                    <input type="range" id="font-size"
+                        min="20" max="48" value="26">
+                </div>
+
+                <!-- 프롬프터 -->
+                <div class="practice-panel">
+
+                    <!-- 사용자가 입력한 대본 표시 영역 -->
+                    <div id="prompter-text" class="prompter-text">
+                    </div>
+
+                    <!-- 마커 편집 안내 -->
+                    <p class="marker-guide">
+                        단어 사이를 누르면 마커를 추가하고, 마커를 누르면 삭제해요.
+                    </p>
+
+                    <!-- 하단 연습 조작 영역 -->
+                    <div class="practice-controls">
+
+                        <div class="control-buttons">
+                            <button type="button" id="practice-start-btn"
+                                class="primary-btn">
+                                시작
+                            </button>
+
+                            <button type="button" id="practice-pause-btn"
+                                class="outline-btn">
+                                일시중지
+                            </button>
+
+                            <button type="button" id="practice-reset-btn"
+                                class="outline-btn">
+                                재시작
+                            </button>
+                        </div>
+
+                        <div class="practice-timer">
+                            경과 <span id="elapsed-time">0:00</span>
+                            &nbsp;/&nbsp;
+                            목표 <span id="practice-target-time">--:--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽 정보 표시 영역 -->
+            <aside class="practice-sidebar">
+
+                <!-- 현재 발표 속도 -->
+                <div class="monitor-card">
+                    <p class="monitor-label">현재 속도</p>
+
+                    <div class="speed-display">
+                        <strong id="current-speed">--</strong>
+
+                        <span class="speed-unit">음절/분</span>
+
+                        <span id="speed-status"
+                            class="speed-badge">
+                            측정 대기
+                        </span>
+                    </div>
+
+                    <p class="speed-target">
+                        목표 <span id="target-speed-range">--</span>
+                    </p>
+                </div>
+
+                <!-- 하이라이트 표시 버튼 -->
+                <button type="button" id="highlight-toggle"
+                    class="sidebar-box">
+                    하이라이트 표시
+                </button>
+
+                <!-- 마이크 인식 상태 -->
+                <div class="sidebar-box">
+                    <svg class="mic-icon" width="32" height="32"
+                        viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+
+                        <rect x="9" y="2" width="6" height="12" rx="3"/>
+                        <path d="M5 10v2a7 7 0 0 0 14 0v-2"/>
+                        <path d="M12 19v3M8 22h8"/>
+                    </svg>
+
+                    <span id="mic-status">마이크 연결 전</span>
+                </div>
+
+                <!-- 결과 화면 이동 버튼 -->
+                <button type="button" id="show-result-btn"
+                    class="primary-btn result-btn">
+                    결과 요약
+                </button>
+            </aside>
+        </section>
+
+        <!-- 4. 실전 모드 연습 화면 -->
+        <section id="real-practice" class="practice-layout" hidden>
+
+            <!-- 왼쪽 연습 영역 -->
+            <div class="practice-main">
+
+                <!-- 글자 크기 조절 -->
+                <div class="font-control">
+                    <span class="practice-mode-label">
+                        실전 모드
+                    </span>
+
+                    <label for="real-font-size">글자 크기</label>
+
+                    <input type="range" id="real-font-size"
+                        min="20" max="48" value="26">
+                </div>
+
+                <!-- 발표 흐름 패널 -->
+                <div class="practice-panel">
+
+                    <div class="flow-header">
+                        <h1>발표 흐름</h1>
+
+                        <span class="ai-label">
+                            프롬프터 없는 모드 · AI 요약
+                        </span>
+                    </div>
+
+                    <!-- AI 요약 발표 흐름 표시 영역 -->
+                    <ol id="presentation-flow" class="flow-list">
+                    </ol>
+
+                    <!-- 하단 연습 조작 영역 -->
+                    <div class="practice-controls">
+
+                        <div class="control-buttons">
+                            <button type="button" id="real-start-btn"
+                                class="primary-btn">
+                                시작
+                            </button>
+
+                            <button type="button" id="real-pause-btn"
+                                class="outline-btn">
+                                일시중지
+                            </button>
+
+                            <button type="button" id="real-reset-btn"
+                                class="outline-btn">
+                                재시작
+                            </button>
+                        </div>
+
+                        <div class="practice-timer">
+                            경과 <span id="real-elapsed-time">0:00</span>
+                            &nbsp;/&nbsp;
+                            목표 <span id="real-target-time">--:--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽 정보 표시 영역 -->
+            <aside class="practice-sidebar">
+                <div class="monitor-card">
+
+                    <!-- 정면 응시율 -->
+                    <div class="gaze-monitor">
+
+                        <div class="gaze-heading">
+                            <label for="gaze-progress">정면 응시율</label>
+
+                            <strong id="gaze-rate">--%</strong>
+                        </div>
+
+                        <progress id="gaze-progress"
+                            value="0" max="100">0%</progress>
+
+                        <p class="privacy-guide">
+                            카메라를 사용해 정면 응시율을 측정해요.
+                        </p>
+                    </div>
+
+                    <!-- 현재 발표 속도 -->
+                    <div class="real-speed-monitor">
+                        <p class="monitor-label">현재 속도</p>
+
+                        <div class="speed-display">
+                            <strong id="real-current-speed">--</strong>
+
+                            <span class="speed-unit">음절/분</span>
+
+                            <span id="real-speed-status"
+                                class="speed-badge">
+                                측정 대기
+                            </span>
+                        </div>
+
+                        <p class="speed-target">
+                            목표 <span id="real-target-speed-range">--</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 카메라 인식 상태 -->
+                <div class="sidebar-box">
+                    <span id="camera-status">카메라 연결 전</span>
+                </div>
+
+                <!-- 마이크 인식 상태 -->
+                <div class="sidebar-box">
+                    <svg class="mic-icon" width="32" height="32"
+                        viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+
+                        <rect x="9" y="2" width="6" height="12" rx="3"/>
+                        <path d="M5 10v2a7 7 0 0 0 14 0v-2"/>
+                        <path d="M12 19v3M8 22h8"/>
+                    </svg>
+
+                    <span id="real-mic-status">마이크 연결 전</span>
+                </div>
+
+                <!-- 결과 화면 이동 버튼 -->
+                <button type="button" id="real-result-btn"
+                    class="primary-btn result-btn">
+                    결과 요약
+                </button>
+            </aside>
+        </section>
+
+        <!-- 5. 결과 및 연습 기록 화면 -->
+        <section id="result" hidden>
+
+            <!-- 상단 결과 요약 카드 -->
+            <div class="result-cards">
+
+                <!-- 평균 속도 -->
+                <article class="result-card">
+                    <h2>평균 속도</h2>
+
+                    <div class="result-value">
+                        <strong id="average-speed">--</strong>
+                        <span>음절/분</span>
+                    </div>
+                </article>
+
+                <!-- 발표 시간 -->
+                <article class="result-card">
+                    <h2>발표 시간</h2>
+
+                    <div class="result-value">
+                        <strong id="final-duration">--:--</strong>
+
+                        <span>
+                            목표 시간
+                            <span id="final-target-time">--:--</span>
+                        </span>
+                    </div>
+                </article>
+
+                <!-- 정면 응시율 -->
+                <article class="result-card">
+                    <h2>정면 응시율</h2>
+
+                    <div class="result-value">
+                        <strong id="final-gaze-rate">--%</strong>
+                    </div>
+                </article>
+
+                <!-- 적정 속도 비율 -->
+                <article class="result-card">
+                    <h2>적정 속도 비율</h2>
+
+                    <div class="result-value">
+                        <strong id="normal-speed-rate">--%</strong>
+                    </div>
+                </article>
+            </div>
+
+            <!-- 하단 상세 결과 영역 -->
+            <div class="result-details">
+
+                <!-- 시간별 속도 추이 -->
+                <section class="result-panel">
+                    <h2>시간별 속도 추이</h2>
+
+                    <div id="speed-chart" class="chart-area">
+
+                        <svg viewBox="0 0 540 240"
+                            role="img"
+                            aria-label="시간별 발표 속도 추이">
+
+                            <!-- 적정 속도 범위 -->
+                            <rect x="10" y="40" width="520" height="80"
+                                fill="#c9efc5" visibility="hidden"/>
+
+                            <text x="20" y="60"
+                                fill="#326b25" font-size="13">
+                            </text>
+
+                            <!-- 속도 추이 그래프 -->
+                            <polyline id="speed-chart-line"
+                                points=""
+                                fill="none"
+                                stroke="#2545ff"
+                                stroke-width="2"/>
+
+                            <!-- 시간축 -->
+                            <line x1="10" y1="212" x2="530" y2="212"
+                                stroke="#959b8d" stroke-width="1"/>
+
+                            <g fill="#7a8270" font-size="13">
+                                <text x="10" y="232">0:00</text>
+                                <text x="112" y="232"></text>
+                                <text x="255" y="232"></text>
+                                <text x="400" y="232"></text>
+
+                                <text x="530" y="232"
+                                    text-anchor="end"></text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- 속도별 비율 -->
+                    <div class="chart-summary">
+                        <span>
+                            빠름 <span id="fast-rate">--%</span>
+                        </span>
+
+                        <span>
+                            적정 <span id="normal-rate">--%</span>
+                        </span>
+
+                        <span>
+                            느림 <span id="slow-rate">--%</span>
+                        </span>
+                    </div>
+                </section>
+
+                <!-- 지난 연습 기록 -->
+                <section class="result-panel">
+
+                    <div class="history-header">
+                        <h2 id="history-heading">지난 연습 기록</h2>
+
+                        <button type="button" id="retry-btn"
+                            class="primary-btn">
+                            다시 연습하기
+                        </button>
+                    </div>
+
+                    <!-- 연습 기록 테이블 -->
+                    <table class="history-table"
+                        aria-labelledby="history-heading">
+
+                        <caption class="visually-hidden">
+                            날짜별 발표 속도 및 정면 응시율 기록
+                        </caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">날짜</th>
+                                <th scope="col">속도</th>
+                                <th scope="col">응시율</th>
+                                <th scope="col">판정</th>
+                            </tr>
+                        </thead>
+
+                        <!-- 실제 연습 기록 표시 영역 -->
+                        <tbody id="history-list">
+                        </tbody>
+                    </table>
+
+                    <!-- 이전 연습과 비교 -->
+                    <p id="practice-feedback" class="history-feedback">
+                        연습 기록이 없습니다.
+                    </p>
+                </section>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
